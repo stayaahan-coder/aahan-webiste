@@ -12,7 +12,6 @@ import galleryWide from "@/imports/MacBookPro163/a53bba2b097032487fbba52d62f96b9
 import expLeft from "@/imports/MacBookPro164/d92dba1e42ae601c519592713fc99dac0339c60e.png";
 import expCenter from "@/imports/MacBookPro164/fb47273566670376a0305867fe3b59a7a01e01a2.png";
 import expRight from "@/imports/MacBookPro164/460a817ffc3817a18f5ccbaedfe13adc1e08a022.png";
-import locationMap from "@/imports/MacBookPro167/a0080f94ba3349f9d7e27667b13ae2d72a6d9659.png";
 import footerSunset from "@/imports/MacBookPro168/eb37d7db04341884958291c0df79334744d32622.png";
 import airbnbImg from "@/imports/MacBookPro168/f4733e1c91a92dbd394ba823bda2f8a78f6695e9.png";
 
@@ -81,32 +80,36 @@ const SLIDES = [
   ],
 ];
 
-/* ─── Navbar ─── */
 function Navbar({ dark }: { dark: boolean }) {
-  const logo  = dark ? "#ffffff" : "#040000";
-  const link  = dark ? "#d9d4cc" : "#040000";
+  const [menuOpen, setMenuOpen] = useState(false);
+  const logo = dark ? "#ffffff" : "#040000";
+  const link = dark ? "#d9d4cc" : "#040000";
 
-  const scrollTo = (id: string) =>
+  const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    setMenuOpen(false);
+  };
+
+  const NAV_ITEMS = [
+    { label: "STORY", id: "story" },
+    { label: "GALLERY", id: "gallery" },
+    { label: "EXPERIENCE", id: "experience" },
+    { label: "LOCATION", id: "location" },
+  ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-10 py-6 transition-colors duration-500">
+    <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-10 py-4 md:py-6 transition-colors duration-500">
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        style={{ fontFamily: CG, color: logo, fontSize: 18, fontWeight: 400, letterSpacing: "0.2em" }}
-        className="transition-colors duration-500 whitespace-nowrap"
+        style={{ fontFamily: CG, color: logo, fontSize: 16, fontWeight: 400, letterSpacing: "0.2em" }}
+        className="md:text-[18px] transition-colors duration-500 whitespace-nowrap"
       >
         A A H A N
       </button>
 
-      <div className="flex items-center gap-x-10">
-        {/* swapped: GALLERY now appears where EXPERIENCE was, and vice-versa */}
-        {[
-          { label: "STORY",      id: "story"      },
-          { label: "GALLERY",    id: "gallery"    },
-          { label: "EXPERIENCE", id: "experience" },
-          { label: "LOCATION",   id: "location"   },
-        ].map(({ label, id }) => (
+      {/* Desktop links */}
+      <div className="hidden md:flex items-center gap-x-10">
+        {NAV_ITEMS.map(({ label, id }) => (
           <button
             key={label}
             onClick={() => scrollTo(id)}
@@ -121,31 +124,108 @@ function Navbar({ dark }: { dark: boolean }) {
       <button
         onClick={() => scrollTo("location")}
         style={{ fontFamily: CG, color: link, fontSize: 13, fontWeight: 700, letterSpacing: "0.1em" }}
-        className="transition-colors duration-500 whitespace-nowrap"
+        className="hidden md:block transition-colors duration-500 whitespace-nowrap"
       >
         BOOK YOUR STAY
       </button>
+
+      {/* Mobile hamburger */}
+      <button
+        className="md:hidden flex flex-col gap-[5px] p-2 z-50"
+        onClick={() => setMenuOpen(!menuOpen)}
+        aria-label="Toggle menu"
+      >
+        <span
+          style={{
+            width: 22,
+            height: 2,
+            background: menuOpen ? "#d9d4cc" : logo,
+            transition: "all 0.3s",
+            transform: menuOpen ? "translateY(7px) rotate(45deg)" : "none",
+          }}
+        />
+        <span
+          style={{
+            width: 22,
+            height: 2,
+            background: menuOpen ? "#d9d4cc" : logo,
+            transition: "all 0.3s",
+            opacity: menuOpen ? 0 : 1,
+          }}
+        />
+        <span
+          style={{
+            width: 22,
+            height: 2,
+            background: menuOpen ? "#d9d4cc" : logo,
+            transition: "all 0.3s",
+            transform: menuOpen ? "translateY(-7px) rotate(-45deg)" : "none",
+          }}
+        />
+      </button>
+
+      {/* Mobile dropdown menu */}
+      {menuOpen && (
+        <div
+          className="md:hidden fixed inset-0 bg-black flex flex-col items-center justify-center gap-8"
+          style={{ zIndex: 40 }}
+        >
+          {NAV_ITEMS.map(({ label, id }) => (
+            <button
+              key={label}
+              onClick={() => scrollTo(id)}
+              style={{ fontFamily: CG, color: "#d9d4cc", fontSize: 20, fontWeight: 700, letterSpacing: "0.1em" }}
+            >
+              {label}
+            </button>
+          ))}
+          <button
+            onClick={() => scrollTo("location")}
+            style={{ fontFamily: CG, color: "#ffd68b", fontSize: 20, fontWeight: 700, letterSpacing: "0.1em" }}
+          >
+            BOOK YOUR STAY
+          </button>
+        </div>
+      )}
     </nav>
   );
 }
 
-/* ─── Experience photo with hover card ─── */
+/* ─── Experience card ─── */
 function ExpCard({ img, alt, title, body }: { img: string; alt: string; title: string; body: string }) {
   return (
     <div className="relative overflow-hidden group cursor-pointer h-full">
       <img
         src={img}
         alt={alt}
-        className="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-105"
+        className="w-full h-full object-cover transition-transform duration-700 ease-in-out md:group-hover:scale-105"
       />
-      {/* Dark overlay — fades in */}
-      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-all duration-500 ease-in-out" />
-      {/* Text block — slides up from below */}
-      <div className="absolute bottom-0 left-0 right-0 p-8 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
-        <p style={{ fontFamily: CG, fontSize: 22, fontWeight: 700, color: "#ffd68b", marginBottom: 10 }}>
+      {/* Dark overlay — off on mobile, fades in on hover for desktop only */}
+      <div className="absolute inset-0 bg-black/0 md:group-hover:bg-black/60 transition-all duration-500 ease-in-out" />
+      {/* Text block — always visible on mobile, slides up from below on desktop hover */}
+      <div className="absolute bottom-0 left-0 right-0 p-5 md:p-8 translate-y-0 md:translate-y-full md:group-hover:translate-y-0 transition-transform duration-500 ease-out">
+        <p
+          style={{
+            fontFamily: CG,
+            fontSize: "clamp(18px,4.5vw,22px)",
+            fontWeight: 700,
+            color: "#ffd68b",
+            marginBottom: 10,
+            textShadow: "0 2px 8px rgba(0,0,0,0.8)",
+          }}
+        >
           {title}
         </p>
-        <p style={{ fontFamily: EBG, fontSize: 15, fontWeight: 400, color: "#fff8f8", lineHeight: 1.6 }}>
+        <p
+          style={{
+            fontFamily: EBG,
+            fontSize: "clamp(13px,3.5vw,15px)",
+            fontWeight: 400,
+            color: "#fff8f8",
+            lineHeight: 1.6,
+            textShadow: "0 1px 6px rgba(0,0,0,0.8)",
+          }}
+        >
           {body}
         </p>
       </div>
@@ -155,8 +235,8 @@ function ExpCard({ img, alt, title, body }: { img: string; alt: string; title: s
 
 /* ─── App ─── */
 export default function App() {
-  const [darkNav, setDarkNav]   = useState(true);
-  const [slide, setSlide]       = useState(0);
+  const [darkNav, setDarkNav] = useState(true);
+  const [slide, setSlide] = useState(0);
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
 
   useEffect(() => {
@@ -177,16 +257,12 @@ export default function App() {
   };
 
   return (
-    <div className="w-full bg-black">
+    <div className="w-full bg-black overflow-x-hidden">
       <Navbar dark={darkNav} />
 
       {/* ── 1. HERO ─────────────────────────────────── */}
-      <section className="relative w-full bg-black" style={{ height: "100vh" }}>
-        {/* Image panel — sits inside the red-box area: below nav, above tagline strip */}
-        <div
-          className="absolute left-0 right-0 overflow-hidden"
-          style={{ top: "10%", bottom: "13%" }}
-        >
+      <section className="relative w-full bg-black h-[100svh]">
+        <div className="absolute left-0 right-0 overflow-hidden top-[8%] bottom-[16%] md:top-[10%] md:bottom-[13%]">
           <div
             className="w-full h-full"
             style={{
@@ -195,24 +271,19 @@ export default function App() {
               backgroundPosition: "center 42%",
             }}
           />
-          {/* Subtle bottom fade into black */}
           <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-black/70" />
         </div>
 
-        {/* Bottom text strip — sits in the black area below the image */}
-        <div
-          className="absolute left-0 right-0 bottom-0 flex items-end justify-between px-10 pb-8"
-          style={{ height: "13%" }}
-        >
+        <div className="absolute left-0 right-0 bottom-0 flex flex-col md:flex-row md:items-end md:justify-between gap-3 px-6 md:px-10 pb-6 md:pb-8 h-[16%] md:h-[13%] justify-end">
           <div>
-            <p style={{ fontFamily: CG, fontSize: 16, fontWeight: 400, color: "#ffffff", lineHeight: 1.5 }}>
+            <p style={{ fontFamily: CG, fontSize: "clamp(13px,3.8vw,16px)", fontWeight: 400, color: "#ffffff", lineHeight: 1.5 }}>
               Wake with Aahan.
             </p>
-            <p style={{ fontFamily: CG, fontSize: 16, fontWeight: 400, color: "#ffffff", lineHeight: 1.5 }}>
+            <p style={{ fontFamily: CG, fontSize: "clamp(13px,3.8vw,16px)", fontWeight: 400, color: "#ffffff", lineHeight: 1.5 }}>
               Sunrises, mountain views, and the charm of Nainital.
             </p>
           </div>
-          <p style={{ fontFamily: EBG, fontSize: 13, fontWeight: 400, color: "#ffd68b" }}>
+          <p style={{ fontFamily: EBG, fontSize: "clamp(11px,3vw,13px)", fontWeight: 400, color: "#ffd68b" }}>
             Nainital, Uttarakhand &nbsp;·&nbsp; 2,084m
           </p>
         </div>
@@ -220,22 +291,17 @@ export default function App() {
 
       {/* ── 2. STORY ────────────────────────────────── */}
       <section id="story" ref={reg("story")} className="bg-black">
-        <div className="flex" style={{ minHeight: "100vh" }}>
-          {/* Left photo — sticky, contained box */}
-          <div
-            className="shrink-0 overflow-hidden"
-            style={{ width: "34%", height: "80vh", marginTop: "95px", marginLeft: "44px" }}
-          >
+        <div className="flex flex-col md:flex-row md:min-h-screen">
+          <div className="shrink-0 overflow-hidden w-full h-[45vh] md:w-[34%] md:h-[80vh] md:mt-[95px] md:ml-[44px]">
             <img src={storyImg} alt="Nainital hillside" className="w-full h-full object-cover" />
           </div>
 
-          {/* Right text */}
-          <div className="flex-1 pt-32 pb-20 px-14 flex flex-col">
-            <p style={{ fontFamily: CG, fontSize: 14, fontWeight: 400, color: "#ffd68b", marginBottom: 24, letterSpacing: "0.05em" }}>
+          <div className="flex-1 pt-10 pb-14 px-6 md:pt-32 md:pb-20 md:px-14 flex flex-col">
+            <p style={{ fontFamily: CG, fontSize: "clamp(12px,3.5vw,14px)", fontWeight: 400, color: "#ffd68b", marginBottom: 20, letterSpacing: "0.05em" }}>
               Our Story
             </p>
             <div
-              style={{ fontFamily: EBG, fontSize: 18, fontWeight: 400, color: "#fff8f8", lineHeight: 1.8 }}
+              style={{ fontFamily: EBG, fontSize: "clamp(15px,4vw,18px)", fontWeight: 400, color: "#fff8f8", lineHeight: 1.75 }}
               className="space-y-4"
             >
               <p>Some dreams arrive quietly.</p>
@@ -271,19 +337,41 @@ export default function App() {
       <section
         id="gallery"
         ref={reg("gallery")}
-        className="bg-[#fef7ee] flex flex-col justify-center"
-        style={{ height: "100vh" }}
+        className="bg-[#fef7ee] flex flex-col justify-center py-16 md:py-0 md:h-screen"
       >
         <p
           className="text-center mb-6"
-          style={{ fontFamily: CG, fontSize: 14, fontWeight: 400, color: "#a86d00", letterSpacing: "0.08em" }}
+          style={{ fontFamily: CG, fontSize: "clamp(12px,3.5vw,14px)", fontWeight: 400, color: "#a86d00", letterSpacing: "0.08em" }}
         >
           Gallery
         </p>
+
+        {/* Mobile gallery grid */}
+        <div className="px-4 grid grid-cols-2 gap-2 md:hidden">
+          <div className="overflow-hidden aspect-square">
+            <img src={galleryForest} alt="Nainital Lake" className="w-full h-full object-cover" />
+          </div>
+          <div className="overflow-hidden aspect-square">
+            <img src={galleryPortrait} alt="Nainital path" className="w-full h-full object-cover" />
+          </div>
+          <div className="overflow-hidden aspect-square">
+            <img src={galleryCollection} alt="Nainital signpost" className="w-full h-full object-cover" />
+          </div>
+          <div className="overflow-hidden aspect-square">
+            <img src={galleryLake} alt="Café Lakeside" className="w-full h-full object-cover" />
+          </div>
+          <div className="overflow-hidden h-[20vh] col-span-2">
+            <img src={galleryWide} alt="Snowy mountain" className="w-full h-full object-cover" />
+          </div>
+          <div className="overflow-hidden h-[20vh] col-span-2">
+            <img src={galleryPanorama} alt="Prayer flags panorama" className="w-full h-full object-cover" />
+          </div>
+        </div>
+
+        {/* Desktop gallery grid */}
         <div
-          className="px-10"
+          className="hidden md:grid px-10"
           style={{
-            display: "grid",
             gridTemplateColumns: "26fr 24fr 18fr 32fr",
             gridTemplateRows: "42vh 32vh",
             gap: 5,
@@ -314,29 +402,30 @@ export default function App() {
       <section
         id="experience"
         ref={reg("experience")}
-        className="bg-black flex flex-col justify-center"
-        style={{ height: "100vh" }}
+        className="bg-black flex flex-col justify-center py-16 md:py-0 md:h-screen"
       >
-        <div className="px-10 mb-8">
-          <p style={{ fontFamily: CG, fontSize: 14, fontWeight: 400, color: "#ffd68b", marginBottom: 12, letterSpacing: "0.05em" }}>
+        <div className="px-6 md:px-10 mb-8">
+          <p style={{ fontFamily: CG, fontSize: "clamp(12px,3.5vw,14px)", fontWeight: 400, color: "#ffd68b", marginBottom: 12, letterSpacing: "0.05em" }}>
             Days at Aahan
           </p>
-          <p style={{ fontFamily: CG, fontSize: 16, fontWeight: 400, color: "#ffffff", maxWidth: 860, lineHeight: 1.65 }}>
+          <p style={{ fontFamily: CG, fontSize: "clamp(14px,4vw,16px)", fontWeight: 400, color: "#ffffff", maxWidth: 860, lineHeight: 1.65 }}>
             The mountains have a way of calling everyone differently. Some answer with long hikes through the pines.
             Others with a quiet sunrise and a cup of chai overlooking the hills. However Nainital speaks to you,
             we'll help you discover it.
           </p>
         </div>
 
-        {/* Three photos with hover cards — proportions 25 : 47 : 28 */}
+        {/* Mobile: stacked cards */}
+        <div className="px-6 flex flex-col gap-4 md:hidden">
+          {EXP_CARDS.map((card) => (
+            <ExpCard key={card.title} {...card} />
+          ))}
+        </div>
+
+        {/* Desktop: 25/47/28 grid */}
         <div
-          className="px-10"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "25fr 47fr 28fr",
-            height: "60vh",
-            gap: 8,
-          }}
+          className="hidden md:grid px-10"
+          style={{ gridTemplateColumns: "25fr 47fr 28fr", height: "60vh", gap: 8 }}
         >
           {EXP_CARDS.map((card) => (
             <ExpCard key={card.title} {...card} />
@@ -348,84 +437,69 @@ export default function App() {
       <section
         id="before-arrive"
         ref={reg("before-arrive")}
-        className="bg-[#fef7ee] px-10 flex flex-col justify-center"
-        style={{ height: "100vh" }}
+        className="bg-[#fef7ee] px-6 md:px-10 flex flex-col justify-center py-16 md:py-0 md:h-screen"
       >
-      <p style={{ fontFamily: CG, fontSize: 14, fontWeight: 400, color: "#a86d00", marginBottom: 16, letterSpacing: "0.05em" }}>
-      Before You Arrive.
-      </p>
-      <p style={{ fontFamily: EBG, fontSize: 20, fontWeight: 400, color: "#000000", maxWidth: 400, lineHeight: 1.55, marginBottom: 44 }}>
-      If this is your first time in Nainital, we've put together a few things that we think you'll find helpful.
-      </p>
+        <p style={{ fontFamily: CG, fontSize: "clamp(12px,3.5vw,14px)", fontWeight: 400, color: "#a86d00", marginBottom: 16, letterSpacing: "0.05em" }}>
+          Before You Arrive.
+        </p>
+        <p style={{ fontFamily: EBG, fontSize: "clamp(16px,4.5vw,20px)", fontWeight: 400, color: "#000000", maxWidth: 400, lineHeight: 1.55, marginBottom: 32 }}>
+          If this is your first time in Nainital, we've put together a few things that we think you'll find helpful.
+        </p>
 
-      {/* Cards — offset ~20% from left to match Figma */}
-      <div
-      style={{
-      display: "grid",
-      gridTemplateColumns: "repeat(3, 1fr)",
-      gap: 16,
-      marginLeft: "19.8%",
-      }}
-      >
-      {SLIDES[slide].map((card) => (
-      <div
-      key={card.title}
-      className="bg-[#fef7ee]"
-      style={{ boxShadow: "0px 4px 25px 0px #c7c7cc", padding: "28px 24px", minHeight: 280 }}
-      >
-      <p style={{ fontFamily: CG, fontSize: 19, fontWeight: 700, color: "#000", marginBottom: 12, lineHeight: 1.2 }}>
-      {card.title}
-      </p>
-      {card.subtitle && (
-      <p style={{ fontFamily: EBG, fontSize: 15, fontWeight: 400, color: "#000", marginBottom: 6 }}>
-      {card.subtitle}
-      </p>
-      )}
-      <p style={{ fontFamily: EBG, fontSize: 15, fontWeight: 400, color: "#000", lineHeight: 1.6 }}>
-      {card.body}
-      </p>
-      </div>
-      ))}
-      </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:ml-[19.8%]">
+          {SLIDES[slide].map((card) => (
+            <div
+              key={card.title}
+              className="bg-[#fef7ee]"
+              style={{ boxShadow: "0px 4px 25px 0px #c7c7cc", padding: "24px 20px", minHeight: 220 }}
+            >
+              <p style={{ fontFamily: CG, fontSize: 18, fontWeight: 700, color: "#000", marginBottom: 12, lineHeight: 1.2 }}>
+                {card.title}
+              </p>
+              {card.subtitle && (
+                <p style={{ fontFamily: EBG, fontSize: 15, fontWeight: 400, color: "#000", marginBottom: 6 }}>
+                  {card.subtitle}
+                </p>
+              )}
+              <p style={{ fontFamily: EBG, fontSize: 15, fontWeight: 400, color: "#000", lineHeight: 1.6 }}>
+                {card.body}
+              </p>
+            </div>
+          ))}
+        </div>
 
-      {/* Slide indicator */}
-      <div className="flex justify-center mt-10" style={{ gap: 0 }}>
-      <button
-      onClick={() => setSlide(0)}
-      aria-label="Slide 1"
-      style={{
-      width: 140,
-      height: 5,
-      background: slide === 0 ? "rgba(0,0,0,0.8)" : "rgba(0,0,0,0.25)",
-      border: "none",
-      cursor: "pointer",
-      transition: "background 0.3s",
-      }}
-      />
-      <button
-      onClick={() => setSlide(1)}
-      aria-label="Slide 2"
-      style={{
-      width: 140,
-      height: 5,
-      background: slide === 1 ? "rgba(0,0,0,0.8)" : "rgba(102,99,95,0.4)",
-      border: "none",
-      cursor: "pointer",
-      transition: "background 0.3s",
-      }}
-      />
-      </div>
+        <div className="flex justify-center mt-10" style={{ gap: 0 }}>
+          <button
+            onClick={() => setSlide(0)}
+            aria-label="Slide 1"
+            className="w-[70px] md:w-[140px]"
+            style={{
+              height: 5,
+              background: slide === 0 ? "rgba(0,0,0,0.8)" : "rgba(0,0,0,0.25)",
+              border: "none",
+              cursor: "pointer",
+              transition: "background 0.3s",
+            }}
+          />
+          <button
+            onClick={() => setSlide(1)}
+            aria-label="Slide 2"
+            className="w-[70px] md:w-[140px]"
+            style={{
+              height: 5,
+              background: slide === 1 ? "rgba(0,0,0,0.8)" : "rgba(102,99,95,0.4)",
+              border: "none",
+              cursor: "pointer",
+              transition: "background 0.3s",
+            }}
+          />
+        </div>
       </section>
 
-
       {/* ── 6. LOCATION ─────────────────────────────── */}
-      <section id="location" ref={reg("location")} className="bg-black" style={{ height: "100vh" }}>
-        <div className="flex h-full">
-          {/* Left: live Google Map — contained box */}
-          <div
-            className="shrink-0 overflow-hidden"
-            style={{ width: "45%", height: "80vh", marginTop: "95px", marginLeft: "44px" }}
-          >
+      <section id="location" ref={reg("location")} className="bg-black md:h-screen">
+        <div className="flex flex-col md:flex-row md:h-full">
+          <div className="shrink-0 overflow-hidden w-full h-[300px] md:w-[45%] md:h-[80vh] md:mt-[95px] md:ml-[44px]">
             <iframe
               src="https://www.google.com/maps/embed?pb=..."
               width="100%"
@@ -438,12 +512,11 @@ export default function App() {
             />
           </div>
 
-          {/* Right: travel info */}
-          <div className="flex-1 pt-36 pb-20 px-14 flex flex-col">
-            <p style={{ fontFamily: CG, fontSize: 14, fontWeight: 400, color: "#ffd68b", marginBottom: 36, letterSpacing: "0.05em" }}>
+          <div className="flex-1 pt-10 pb-14 px-6 md:pt-36 md:pb-20 md:px-14 flex flex-col">
+            <p style={{ fontFamily: CG, fontSize: "clamp(12px,3.5vw,14px)", fontWeight: 400, color: "#ffd68b", marginBottom: 28, letterSpacing: "0.05em" }}>
               Getting Here
             </p>
-            <div style={{ fontFamily: EBG, fontSize: 17, fontWeight: 400, color: "#ffffff", lineHeight: 1.7, marginBottom: 44 }}>
+            <div style={{ fontFamily: EBG, fontSize: "clamp(14px,4vw,17px)", fontWeight: 400, color: "#ffffff", lineHeight: 1.7, marginBottom: 36 }}>
               <p style={{ fontWeight: 700, marginBottom: 6 }}>Nainital, Uttarakhand</p>
               <p>
                 Tucked into the hillside just above Mall Road, Aahan is easy to reach while remaining quietly connected
@@ -452,17 +525,17 @@ export default function App() {
               </p>
             </div>
 
-            <div className="space-y-8">
+            <div className="space-y-6 md:space-y-8">
               {[
-                { mode: "By Air",   detail: "Pantnagar Airport — Approximately 68 km away." },
+                { mode: "By Air", detail: "Pantnagar Airport — Approximately 68 km away." },
                 { mode: "By Train", detail: "Kathgodam Railway Station — Approximately 34 km away." },
-                { mode: "By Road",  detail: "Around 300 km from Delhi, the drive takes approximately 6–7 hours, winding through the foothills before reaching Nainital." },
+                { mode: "By Road", detail: "Around 300 km from Delhi, the drive takes approximately 6–7 hours, winding through the foothills before reaching Nainital." },
               ].map(({ mode, detail }) => (
                 <div key={mode}>
-                  <p style={{ fontFamily: CG, fontSize: 20, fontWeight: 700, color: "#ffffff", marginBottom: 6 }}>
+                  <p style={{ fontFamily: CG, fontSize: "clamp(17px,4.5vw,20px)", fontWeight: 700, color: "#ffffff", marginBottom: 6 }}>
                     {mode}
                   </p>
-                  <p style={{ fontFamily: EBG, fontSize: 16, fontWeight: 400, color: "#ffffff", lineHeight: 1.6 }}>
+                  <p style={{ fontFamily: EBG, fontSize: "clamp(14px,4vw,16px)", fontWeight: 400, color: "#ffffff", lineHeight: 1.6 }}>
                     {detail}
                   </p>
                 </div>
@@ -473,9 +546,8 @@ export default function App() {
       </section>
 
       {/* ── 7. UNTIL NEXT SUNRISE + FOOTER ──────────── */}
-      <section className="bg-black flex flex-col" style={{ height: "100vh" }}>
-        {/* Sunset hero */}
-        <div className="relative" style={{ height: "55vh" }}>
+      <section className="bg-black flex flex-col md:h-screen">
+        <div className="relative h-[40vh] md:h-[55vh]">
           <div
             className="absolute inset-0"
             style={{
@@ -485,12 +557,12 @@ export default function App() {
             }}
           />
           <div className="absolute inset-0 bg-black/25" />
-          <div className="absolute inset-0 flex flex-col justify-center px-10">
-            <div style={{ width: 80, height: 1, background: "#ffd68b", marginBottom: 10 }} />
-            <p style={{ fontFamily: CG, fontSize: 24, fontWeight: 400, color: "#ffffff", marginBottom: 28 }}>
+          <div className="absolute inset-0 flex flex-col justify-center px-6 md:px-10">
+            <div style={{ width: 60, height: 1, background: "#ffd68b", marginBottom: 10 }} />
+            <p style={{ fontFamily: CG, fontSize: "clamp(18px,5.5vw,24px)", fontWeight: 400, color: "#ffffff", marginBottom: 20 }}>
               Until Next Sunrise.
             </p>
-            <p style={{ fontFamily: CG, fontSize: 24, fontWeight: 400, color: "#ffffff", lineHeight: 1.55 }}>
+            <p style={{ fontFamily: CG, fontSize: "clamp(18px,5.5vw,24px)", fontWeight: 400, color: "#ffffff", lineHeight: 1.55 }}>
               Thank you for being here.
               <br />
               We can't wait to welcome you to Aahan
@@ -498,20 +570,10 @@ export default function App() {
           </div>
         </div>
 
-        {/* Footer info */}
-        <div className="px-10 flex-1 flex items-center">
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1.2fr 1fr 1.8fr",
-              gap: 60,
-              alignItems: "start",
-              width: "100%",
-            }}
-          >
-            {/* Address + contact */}
+        <div className="px-6 md:px-10 flex-1 flex items-center py-12 md:py-0">
+          <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr_1.8fr] gap-10 md:gap-[60px] items-start w-full">
             <div>
-              <p style={{ fontFamily: CG, fontSize: 22, fontWeight: 400, color: "#ffffff", marginBottom: 10, letterSpacing: "0.1em" }}>
+              <p style={{ fontFamily: CG, fontSize: 20, fontWeight: 400, color: "#ffffff", marginBottom: 10, letterSpacing: "0.1em" }}>
                 A A H A N
               </p>
               <div style={{ width: 80, height: 1, background: "#ffd68b", marginBottom: 16 }} />
@@ -527,7 +589,6 @@ export default function App() {
               </p>
             </div>
 
-            {/* Stay connected */}
             <div>
               <p style={{ fontFamily: CG, fontSize: 15, fontWeight: 400, color: "#ffd68b", marginBottom: 22, letterSpacing: "0.05em" }}>
                 Stay connected
@@ -554,8 +615,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* Short note */}
-
             <div>
               <p style={{ fontFamily: CG, fontSize: 15, fontWeight: 400, color: "#ffd68b", marginBottom: 6, letterSpacing: "0.05em" }}>
                 A short note from us
@@ -575,9 +634,8 @@ export default function App() {
               </p>
             </div>
           </div>
-
-          </div>
-        <div className="px-10 pb-4 flex justify-end">
+        </div>
+        <div className="px-6 md:px-10 pb-4 flex justify-end">
           <p style={{ fontFamily: EBG, fontSize: 12, color: "#ffffff", opacity: 0.6 }}>© 2026 Aahan</p>
         </div>
       </section>
