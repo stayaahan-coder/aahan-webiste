@@ -14,6 +14,12 @@ import expCenter from "@/imports/MacBookPro164/fb47273566670376a0305867fe3b59a7a
 import expRight from "@/imports/MacBookPro164/460a817ffc3817a18f5ccbaedfe13adc1e08a022.png";
 import footerSunset from "@/imports/MacBookPro168/eb37d7db04341884958291c0df79334744d32622.png";
 import airbnbImg from "@/imports/MacBookPro168/f4733e1c91a92dbd394ba823bda2f8a78f6695e9.png";
+import propertyLiving from "@/imports/MacBookPro168/property-living.jpg";
+import propertyBedroom from "@/imports/MacBookPro168/property-bedroom.jpg";
+import propertyBathroom from "@/imports/MacBookPro168/property-bathroom.jpg";
+import propertyKitchen from "@/imports/MacBookPro168/property-kitchen.jpg";
+import propertyBalcony from "@/imports/MacBookPro168/property-balcony.jpg";
+import propertyExterior from "@/imports/MacBookPro168/property-exterior.jpg";
 
 const CG = "'Cormorant Garamond', serif";
 const EBG = "'EB Garamond', serif";
@@ -398,7 +404,72 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── 4. EXPERIENCE ───────────────────────────── */}
+      {/* ── 4. Property photos ──────────────────────────────── */}
+      <section
+        id="Property Photos"
+        ref={reg("Property Photos")}
+        className="bg-[#fef7ee] flex flex-col justify-center py-16 md:py-0 md:h-screen"
+      >
+        <p
+          className="text-center mb-6"
+          style={{ fontFamily: CG, fontSize: "clamp(12px,3.5vw,14px)", fontWeight: 400, color: "#a86d00", letterSpacing: "0.08em" }}
+        >
+          Property Photos
+        </p>
+
+        {/* Mobile gallery grid */}
+        <div className="px-4 grid grid-cols-2 gap-2 md:hidden">
+          <div className="overflow-hidden aspect-square">
+            <img src={propertyLiving} alt="Living room" className="w-full h-full object-cover" />
+          </div>
+          <div className="overflow-hidden aspect-square">
+            <img src={propertyBedroom} alt="Bedroom" className="w-full h-full object-cover" />
+          </div>
+          <div className="overflow-hidden aspect-square">
+            <img src={propertyBathroom} alt="Bathroom" className="w-full h-full object-cover" />
+          </div>
+          <div className="overflow-hidden aspect-square">
+            <img src={propertyKitchen} alt="Kitchen" className="w-full h-full object-cover" />
+          </div>
+          <div className="overflow-hidden h-[20vh] col-span-2">
+            <img src={propertyBalcony} alt="Balcony view" className="w-full h-full object-cover" />
+          </div>
+          <div className="overflow-hidden h-[20vh] col-span-2">
+            <img src={propertyExterior} alt="Property exterior" className="w-full h-full object-cover" />
+          </div>
+        </div>
+
+        {/* Desktop gallery grid */}
+        <div
+          className="hidden md:grid px-10"
+          style={{
+            gridTemplateColumns: "26fr 24fr 18fr 32fr",
+            gridTemplateRows: "42vh 32vh",
+            gap: 5,
+          }}
+        >
+          <div style={{ gridColumn: "1", gridRow: "1", overflow: "hidden" }}>
+            <img src={propertyLiving} alt="Living room" className="w-full h-full object-cover" />
+          </div>
+          <div style={{ gridColumn: "2", gridRow: "1 / 3", overflow: "hidden" }}>
+            <img src={propertyBedroom} alt="Bedroom" className="w-full h-full object-cover" />
+          </div>
+          <div style={{ gridColumn: "3", gridRow: "1", overflow: "hidden" }}>
+            <img src={propertyBathroom} alt="Bathroom" className="w-full h-full object-cover" />
+          </div>
+          <div style={{ gridColumn: "4", gridRow: "1", overflow: "hidden" }}>
+            <img src={propertyKitchen} alt="Kitchen" className="w-full h-full object-cover" />
+          </div>
+          <div style={{ gridColumn: "1", gridRow: "2", overflow: "hidden" }}>
+            <img src={propertyBalcony} alt="Balcony view" className="w-full h-full object-cover" />
+          </div>
+          <div style={{ gridColumn: "3 / 5", gridRow: "2", overflow: "hidden" }}>
+            <img src={propertyExterior} alt="Property exterior" className="w-full h-full object-cover" />
+          </div>
+        </div>
+      </section>
+
+      {/* ── 5. EXPERIENCE ───────────────────────────── */}
       <section
         id="experience"
         ref={reg("experience")}
@@ -433,7 +504,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── 5. BEFORE YOU ARRIVE ────────────────────── */}
+      {/* ── 6. BEFORE YOU ARRIVE ────────────────────── */}
       <section
         id="before-arrive"
         ref={reg("before-arrive")}
@@ -496,12 +567,12 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── 6. LOCATION ─────────────────────────────── */}
+      {/* ── 7. LOCATION ─────────────────────────────── */}
       <section id="location" ref={reg("location")} className="bg-black md:h-screen">
         <div className="flex flex-col md:flex-row md:h-full">
           <div className="shrink-0 overflow-hidden w-full h-[300px] md:w-[45%] md:h-[80vh] md:mt-[95px] md:ml-[44px]">
             <iframe
-              src="https://www.google.com/maps/embed?pb=..."
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5535.605431541714!2d79.45923982484247!3d29.38607839735613!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39a0a19ba26f7165%3A0x5194a600e389fef8!2sAAHAN!5e0!3m2!1sen!2sin!4v1784139751342!5m2!1sen!2sin"
               width="100%"
               height="100%"
               style={{ border: 0 }}
@@ -545,7 +616,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── 7. UNTIL NEXT SUNRISE + FOOTER ──────────── */}
+      {/* ── 8. UNTIL NEXT SUNRISE + FOOTER ──────────── */}
       <section className="bg-black flex flex-col md:h-screen">
         <div className="relative h-[40vh] md:h-[55vh]">
           <div
@@ -583,9 +654,28 @@ export default function App() {
                 Uttrakhand, India — 263001
               </p>
               <div style={{ width: 80, height: 1, background: "#ffd68b", marginBottom: 14 }} />
-              <p style={{ fontFamily: EBG, fontSize: 15, fontWeight: 400, color: "#fff9f9", lineHeight: 1.8 }}>
-                +91 7253858523<br />
-                stayaahan@gmail.com
+              <p
+                style={{
+                  fontFamily: EBG,
+                  fontSize: 15,
+                  fontWeight: 400,
+                  color: "#fff9f9",
+                  lineHeight: 1.8,
+                }}
+              >
+                <a
+                  href="https://wa.me/916397568296"
+                  style={{ color: "inherit", textDecoration: "none" }}
+                >
+                  +91 6397568296
+                </a>
+                <br />
+                <a
+                  href="mailto:stayaahan@gmail.com"
+                  style={{ color: "inherit", textDecoration: "none" }}
+                >
+                  stayaahan@gmail.com
+                </a>
               </p>
             </div>
 
@@ -594,27 +684,62 @@ export default function App() {
                 Stay connected
               </p>
               <div className="space-y-5">
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center justify-center" style={{ width: 22, height: 22 }}>
-                    <Instagram size={22} color="white" strokeWidth={1.5} style={{ opacity: 0.7 }} />
+
+                <a
+                  href="https://www.instagram.com/stayaahan?igsh=MWIzZ2xmMXVyNm8wMQ%3D%3D&utm_source=qr"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+                >
+                  <div
+                    className="flex items-center justify-center"
+                    style={{ width: 22, height: 22 }}
+                  >
+                    <Instagram
+                      size={22}
+                      color="white"
+                      strokeWidth={1.5}
+                      style={{ opacity: 0.7 }}
+                    />
                   </div>
-                  <span style={{ fontFamily: EBG, fontSize: 15, color: "#fff9f9" }}>Instagram</span>
-                </div>
+                  <span
+                    style={{ fontFamily: EBG, fontSize: 15, color: "#fff9f9" }}
+                  >
+                    Instagram
+                  </span>
+                </a>
                 <div className="flex items-center gap-3">
                   <div className="flex items-center justify-center" style={{ width: 22, height: 22 }}>
                     <img src={airbnbImg} alt="Airbnb" style={{ width: 22, height: 22, objectFit: "contain", opacity: 0.7 }} />
                   </div>
                   <span style={{ fontFamily: EBG, fontSize: 15, color: "#fff9f9" }}>Airbnb</span>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center justify-center" style={{ width: 22, height: 22 }}>
-                    <MapPin size={22} color="white" strokeWidth={1.5} style={{ opacity: 0.7 }} />
+                <a
+                  href="https://maps.app.goo.gl/aeq4ev5fSncqJFyb7"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+                >
+                  <div
+                    className="flex items-center justify-center"
+                    style={{ width: 22, height: 22 }}
+                  >
+                    <MapPin
+                      size={22}
+                      color="white"
+                      strokeWidth={1.5}
+                      style={{ opacity: 0.7 }}
+                    />
                   </div>
-                  <span style={{ fontFamily: EBG, fontSize: 15, color: "#fff9f9" }}>Google Maps</span>
-                </div>
+                  <span
+                    style={{ fontFamily: EBG, fontSize: 15, color: "#fff9f9" }}
+                  >
+                    Google Maps
+                  </span>
+                </a>
               </div>
             </div>
-
+            
             <div>
               <p style={{ fontFamily: CG, fontSize: 15, fontWeight: 400, color: "#ffd68b", marginBottom: 6, letterSpacing: "0.05em" }}>
                 A short note from us
